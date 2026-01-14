@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="img/logo-mare.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI4Devs - MVP Interativo | Manoela Resende</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #b35a5a;
+            --primary-light: #c96b6b;
+            --primary-dark: #803f3f;
+            --secondary: #2c3e50;
+            --text: #f8f9fa;
+            --text-dark: #dee2e6;
+            --background: #121212;
+            --background-light: #1e1e1e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        a {
+            color: var(--text);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--primary);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            transition: background-color 0.3s ease;
+            background-color: rgba(18, 18, 18, 0.9);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-menu li {
+            margin-left: 30px;
+        }
+
+        .nav-menu a {
+            font-weight: 500;
+        }
+
+        .nav-menu a.active {
+            color: var(--primary);
+        }
+
+        .language-selector {
+            display: flex;
+            gap: 10px;
+        }
+
+        .language-selector a {
+            font-weight: 500;
+        }
+
+        .language-selector a.active {
+            color: var(--primary);
+        }
+
+        /* Project Header */
+        .project-header {
+            position: relative;
+            padding-top: 120px;
+            padding-bottom: 60px;
+            background-color: var(--background-light);
+            overflow: hidden;
+        }
+
+        .project-header::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                linear-gradient(to right, rgba(18,18,18,0.95) 20%, #121212b3 60%, rgba(18,18,18,0.2) 100%),
+                url('img/brand.png') no-repeat right center/cover;
+            opacity: 0.5;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .project-header::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--primary);
+            opacity: 0.15;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .project-header .header-overlay {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(18,18,18,0.6);
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .project-header > .container {
+            position: relative;
+            z-index: 4;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .breadcrumb a {
+            color: var(--text-dark);
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary);
+        }
+
+        .breadcrumb .separator {
+            margin: 0 10px;
+            color: var(--text-dark);
+        }
+
+        .project-tag {
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: var(--primary-dark);
+            color: white;
+            font-size: 14px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .project-title {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .project-subtitle {
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 40px;
+            max-width: 800px;
+        }
+
+        .project-meta {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .meta-label {
+            font-size: 14px;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .meta-value {
+            font-weight: 500;
+        }
+
+        /* Main Content */
+        .project-content {
+            padding: 80px 0;
+        }
+
+        .content-section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: var(--primary);
+        }
+
+        .section-content {
+            max-width: 800px;
+            margin-bottom: 40px;
+        }
+
+        .section-content p {
+            margin-bottom: 20px;
+        }
+
+        .section-content strong {
+            color: var(--primary-light);
+            font-weight: 600;
+        }
+
+        .section-image {
+            margin: 40px 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .section-image img {
+            width: 100%;
+            display: block;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .image-grid img {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        /* Process Steps */
+        .process-steps {
+            display: flex;
+            flex-direction: column;
+            margin: 40px 0;
+        }
+
+        .step {
+            display: flex;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            padding-top: 5px;
+        }
+
+        .step-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .step-description {
+            color: var(--text-dark);
+        }
+
+        /* Results Section */
+        .results {
+            background-color: var(--background-light);
+            padding: 80px 0;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .result-card {
+            background-color: var(--background);
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .result-icon {
+            font-size: 36px;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .result-number {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .result-text {
+            color: var(--text-dark);
+        }
+
+        /* Call to Action */
+        .cta {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .cta-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .cta-text {
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        /* Navigation */
+        .project-navigation {
+            display: flex;
+            justify-content: space-between;
+            padding: 40px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-previous, .nav-next {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-previous i, .nav-next i {
+            font-size: 24px;
+        }
+
+        .nav-previous i {
+            margin-right: 15px;
+        }
+
+        .nav-next i {
+            margin-left: 15px;
+        }
+
+        .nav-project {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-label {
+            font-size: 12px;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .nav-title {
+            font-weight: 500;
+        }
+
+        /* Button */
+        .btn {
+            display: inline-flex;
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+        }
+
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--text);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: 2px solid var(--primary);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+            color: white;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary);
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-text {
+            font-size: 14px;
+            color: white;
+        }
+
+        .back-to-top {
+            background-color: var(--primary-dark);
+            color: white;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 4px;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-toggle {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 24px;
+            cursor: pointer;
+            display: none;
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            height: 100vh;
+            background-color: var(--background);
+            padding: 60px 20px;
+            transition: right 0.3s ease;
+            z-index: 1001;
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .mobile-menu-items {
+            list-style: none;
+        }
+
+        .mobile-menu-items li {
+            margin-bottom: 20px;
+        }
+
+        .mobile-menu-items a {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.7);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 1000;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Animation */
+        .animate {
+            animation: fadeInUp 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .image-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .project-title {
+                font-size: 32px;
+            }
+
+            .project-meta {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .project-navigation {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+        }
+
+        .img-ajustada {
+            max-width: 600px;
+            width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .hero-buttons {
+            display: inline-flex;
+            gap: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .hero-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                align-items: stretch;
+            }
+            .hero-buttons .btn {
+                width: 100%;
+                margin: 0;
+                justify-content: center;
+            }
+        }
+
+        .module-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .module-list li {
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .module-list li::before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .tech-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: var(--background-light);
+            border: 1px solid var(--primary-dark);
+            border-radius: 4px;
+            font-size: 14px;
+            color: var(--text);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header id="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo"><img src="img/logo-mare.svg" alt="Logo Mare" /></a>
+                <ul class="nav-menu">
+                    <li><a href="index.html#hero">Home</a></li>
+                    <li><a href="index.html#projects" class="active">Projetos</a></li>
+                    <li><a href="index.html#about">Sobre Mim</a></li>
+                    <li><a href="index.html#skills">Habilidades</a></li>
+                    <li><a href="index.html#contact">Contato</a></li>
+                </ul>
+                <button class="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu">
+        <button class="mobile-menu-close">
+            <i class="fas fa-times"></i>
+        </button>
+        <ul class="mobile-menu-items">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#projects">Projetos</a></li>
+            <li><a href="index.html#about">Sobre Mim</a></li>
+            <li><a href="index.html#skills">Skills</a></li>
+            <li><a href="index.html#contact">Contato</a></li>
+        </ul>
+    </div>
+    <div class="overlay"></div>
+
+    <!-- Project Header -->
+    <section class="project-header">
+        <div class="header-overlay"></div>
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html">Home</a>
+                <span class="separator">/</span>
+                <a href="index.html#projects">Projetos</a>
+                <span class="separator">/</span>
+                <span>UI4Devs - MVP Interativo</span>
+            </div>
+            <span class="project-tag">Web App</span>
+            <span class="project-tag">UI/UX Design</span>
+            <span class="project-tag">Pesquisa</span>
+            <h1 class="project-title">UI4Devs: MVP Interativo</h1>
+            <p class="project-subtitle">Aplicação web que traduz diretrizes práticas de UI em etapas guiadas, ajudando desenvolvedores a criar interfaces mais acessíveis e usáveis</p>
+            <div class="project-meta">
+                <div class="meta-item">
+                    <span class="meta-label">Projeto</span>
+                    <span class="meta-value">Trabalho de Conclusão de Curso</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Papel</span>
+                    <span class="meta-value">Desenvolvimento, UI/UX Design & Pesquisa</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Ano</span>
+                    <span class="meta-value">2025</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Link</span>
+                    <span class="meta-value"><a href="https://ui4devs.vercel.app" target="_blank" style="color: var(--primary); text-decoration: underline;">ui4devs.vercel.app</a></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="project-content">
+        <div class="container">
+            <!-- Visão Geral -->
+            <div class="content-section">
+                <h2 class="section-title">O Projeto</h2>
+                <div class="section-content">
+                    <p>O <strong>UI4Devs</strong> é um Produto Mínimo Viável (MVP) desenvolvido como parte do Trabalho de Conclusão de Curso, representando a materialização prática de um guia estruturado de interface para desenvolvedores. A ferramenta transforma recomendações teóricas em uma aplicação web interativa, organizando diretrizes de usabilidade em módulos guiados e atividades práticas.</p>
+                    <p>O objetivo central é oferecer um recurso acessível que ajude desenvolvedores sem formação específica em design a tomar decisões mais informadas sobre interface, reduzindo erros comuns de usabilidade e melhorando a qualidade visual e funcional dos sistemas desenvolvidos.</p>
+                </div>
+            </div>
+
+            <!-- Fundamentação -->
+            <div class="content-section">
+                <h2 class="section-title">Fundamentação e Estrutura</h2>
+                <div class="section-content">
+                    <p>O UI4Devs foi desenvolvido a partir da análise sistemática de dois sistemas reais, identificando padrões recorrentes de problemas de usabilidade. As diretrizes foram fundamentadas em três pilares reconhecidos:</p>
+                    <ul class="module-list" style="margin-top: 20px;">
+                        <li><strong>Heurísticas de Usabilidade de Nielsen</strong> - princípios consolidados para identificar problemas comuns de interface</li>
+                        <li><strong>Princípios C.R.A.P.</strong> (Contraste, Repetição, Alinhamento e Proximidade) - diretrizes visuais para organização e hierarquia</li>
+                        <li><strong>Diretrizes WCAG 2.2</strong> - critérios de acessibilidade para garantir conteúdo perceptível, operável, compreensível e robusto</li>
+                    </ul>
+                    <p>A aplicação está organizada em <strong>quatro módulos principais</strong>, cada um abordando uma dimensão essencial do design de interfaces:</p>
+                    <ul class="module-list" style="margin-top: 20px;">
+                        <li><strong>Legibilidade e Cores:</strong> paleta acessível, tipografia e hierarquia visual, configuração de componentes</li>
+                        <li><strong>Navegação e Operabilidade:</strong> espaçamento responsivo, indicadores de localização, áreas de toque adequadas, ações seguras</li>
+                        <li><strong>Feedback e Gestão de Erros:</strong> feedback visual, confirmações, validação progressiva, mensagens claras, ajuda contextual</li>
+                        <li><strong>Consistência e Padrões Visuais:</strong> sistema de espaçamento, padronização de ícones, linguagem uniforme, biblioteca de componentes</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tecnologias -->
+            <div class="content-section">
+                <h2 class="section-title">Tecnologias e Implementação</h2>
+                <div class="section-content">
+                    <p>O MVP foi desenvolvido utilizando tecnologias modernas e adequadas para uma aplicação web interativa e responsiva:</p>
+                    <div class="tech-stack">
+                        <span class="tech-badge">Next.js 14</span>
+                        <span class="tech-badge">TypeScript</span>
+                        <span class="tech-badge">Tailwind CSS</span>
+                        <span class="tech-badge">React Context API</span>
+                        <span class="tech-badge">Vercel</span>
+                    </div>
+                    <p>A arquitetura foi planejada para permitir evolução gradual, com separação clara de responsabilidades. O frontend utiliza Next.js com App Router, permitindo rotas dinâmicas e organização modular. O gerenciamento de estado foi centralizado usando React Context API, garantindo consistência entre as etapas da avaliação.</p>
+                    <p>Para a etapa de validação, a aplicação funcionou exclusivamente no frontend, utilizando localStorage para persistência de dados. Essa configuração permitiu validar a experiência completa do usuário enquanto a arquitetura de backend permanece em desenvolvimento para versões futuras.</p>
+                </div>
+            </div>
+
+            <!-- Identidade Visual -->
+            <div class="content-section">
+                <h2 class="section-title">Identidade Visual</h2>
+                <div class="section-content">
+                    <p>A identidade visual do UI4Devs foi pensada para refletir clareza, simplicidade e alinhamento com o universo dos desenvolvedores. O símbolo combina três elementos significativos:</p>
+                    <ul class="module-list" style="margin-top: 20px;">
+                        <li>Contorno arredondado representando a interface gráfica</li>
+                        <li>Marcas "&lt;&gt;" que remetem ao código</li>
+                        <li>Cursor de mouse, referência histórica ao dispositivo que marcou a transição para interações mais intuitivas</li>
+                    </ul>
+                    <p>A tipografia utiliza a família <strong>Ubuntu</strong>, escolhida pela legibilidade, formas suaves e associação visual a ambientes de programação. A paleta cromática adota o verde como cor primária, apoiada em referências da psicologia das cores ligadas à tecnologia e conexões históricas com monitores de console.</p>
+                    <p>Essa identidade visual reforça simbolicamente a relação entre desenvolvimento e interação, enquanto os próprios componentes da aplicação seguem os princípios de consistência e clareza promovidos pelo guia.</p>
+                </div>
+            </div>
+
+            <!-- Funcionalidades -->
+            <div class="content-section">
+                <h2 class="section-title">Funcionalidades e Experiência</h2>
+                <div class="section-content">
+                    <p>O UI4Devs oferece uma experiência guiada e interativa, onde os usuários percorrem os módulos sequencialmente, realizando atividades práticas que apoiam decisões de interface. As principais funcionalidades incluem:</p>
+                </div>
+                <div class="process-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3 class="step-title">Criação de Projeto</h3>
+                            <p class="step-description">O usuário inicia informando o nome do sistema ou projeto que deseja avaliar, criando uma avaliação personalizada.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3 class="step-title">Navegação Modular</h3>
+                            <p class="step-description">Painel principal com barra de progresso e acesso aos quatro módulos, permitindo navegação sequencial ou por módulos específicos.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3 class="step-title">Atividades Interativas</h3>
+                            <p class="step-description">Cada módulo oferece etapas guiadas com seleções, geração de paletas, pré-visualizações e validações visuais em tempo real.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3 class="step-title">Resumo e Exportação</h3>
+                            <p class="step-description">Ao final de cada módulo, o usuário visualiza um resumo consolidado das decisões e pode exportar as escolhas em formato Markdown ou CSS.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="results">
+        <div class="container">
+            <h2 class="section-title">Resultados da Validação</h2>
+            <div class="section-content">
+                <p>O MVP foi submetido a um processo de validação por meio de um survey estruturado em duas etapas (pré-uso e pós-uso), envolvendo 44 participantes que utilizaram a ferramenta e relataram suas percepções. Os resultados demonstraram a eficácia do formato interativo:</p>
+            </div>
+            
+            <div class="results-grid">
+                <div class="result-card animate">
+                    <div class="result-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="result-number">90,9%</div>
+                    <div class="result-text">Avaliaram como muito fácil de seguir</div>
+                </div>
+                
+                <div class="result-card animate">
+                    <div class="result-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div class="result-number">84,1%</div>
+                    <div class="result-text">Identificaram problemas de design antes não percebidos</div>
+                </div>
+                
+                <div class="result-card animate">
+                    <div class="result-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="result-number">86,4%</div>
+                    <div class="result-text">Afirmaram que utilizariam o guia novamente</div>
+                </div>
+                
+                <div class="result-card animate">
+                    <div class="result-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="result-number">93,2%</div>
+                    <div class="result-text">Recomendariam a ferramenta a outros profissionais</div>
+                </div>
+                
+                <div class="result-card animate">
+                    <div class="result-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="result-number">65,9%</div>
+                    <div class="result-text">Concluíram as etapas em menos de 15 minutos</div>
+                </div>
+                
+                <div class="result-card animate">
+                    <div class="result-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="result-number">100%</div>
+                    <div class="result-text">Taxa de conclusão no módulo de Legibilidade e Cores</div>
+                </div>
+            </div>
+            
+            <div class="section-content" style="margin-top: 40px;">
+                <p>Os resultados qualitativos complementaram esses números, com participantes destacando principalmente a <strong>utilidade prática</strong> e o <strong>caráter didático</strong> da ferramenta. Muitos relataram que o material favoreceu o aprendizado e facilitou a compreensão de padrões de interface, especialmente para usuários com pouca experiência prévia em UI.</p>
+                <p>O alcance geográfico da validação também foi significativo, com participantes distribuídos por 10 estados brasileiros e 3 países (Brasil, Argentina e Áustria), demonstrando o potencial de adoção da ferramenta em diferentes contextos.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta">
+        <div class="container">
+            <h2 class="cta-title">Explore o UI4Devs</h2>
+            <p class="cta-text">Acesse a aplicação e descubra como ela pode ajudar você ou sua equipe a criar interfaces mais acessíveis e usáveis, mesmo sem formação específica em design.</p>
+            <div class="hero-buttons">
+                <a href="https://ui4devs.vercel.app" target="_blank" class="btn btn-primary">Acessar UI4Devs</a>
+                <a href="guia.html" class="btn btn-outline">Ver Guia Completo (TCC)</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Navigation -->
+    <div class="container">
+        <div class="project-navigation">
+            <a href="guia.html" class="nav-previous">
+                <i class="fas fa-arrow-left"></i>
+                <div class="nav-project">
+                    <span class="nav-label">Projeto Anterior</span>
+                    <span class="nav-title">Guia de UI para Desenvolvedores - TCC</span>
+                </div>
+            </a>
+            <a href="helpdesk.html" class="nav-next">
+                <div class="nav-project">
+                    <span class="nav-label">Próximo Projeto</span>
+                    <span class="nav-title">Sistema de Helpdesk UI/UX</span>
+                </div>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-text">© 2025 <a href="https://www.linkedin.com/in/manoelaresende/" target="_blank" style="color: white; text-decoration: underline;">Manoela Resende</a>. Todos os direitos reservados.</p>
+                <a href="#" class="back-to-top">
+                    <i class="fas fa-chevron-up"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Font Awesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+
+    <!-- Script para funcionalidades da página -->
+    <script>
+        // Função para animar elementos quando entrarem na viewport
+        const animateElements = () => {
+            const elements = document.querySelectorAll('.animate');
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                if (elementPosition < windowHeight - 100) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        };
+
+        window.addEventListener('scroll', animateElements);
+        window.addEventListener('load', animateElements);
+
+        // Funcionalidade do menu mobile
+        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const mobileMenuClose = document.querySelector('.mobile-menu-close');
+        const overlay = document.querySelector('.overlay');
+
+        mobileMenuToggle.addEventListener('click', () => {
+            mobileMenu.classList.add('active');
+            overlay.classList.add('active');
+        });
+
+        mobileMenuClose.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        // Back to top
+        const backToTop = document.querySelector('.back-to-top');
+        backToTop.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
